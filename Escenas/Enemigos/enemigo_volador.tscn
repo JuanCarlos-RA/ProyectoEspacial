@@ -1,0 +1,96 @@
+[gd_scene load_steps=10 format=3 uid="uid://b2lgg27psiy4w"]
+
+[ext_resource type="Texture2D" uid="uid://v0o34aj0pr8k" path="res://Recursos/Enemigos/Vampiro.png" id="1_jadrh"]
+[ext_resource type="Script" path="res://Scripts/EnemigoVolador/enemigo_volador.gd" id="1_ku4vx"]
+[ext_resource type="PackedScene" uid="uid://cv7fc1v18nox3" path="res://Escenas/EscenasUtiles/componete_lastimar.tscn" id="3_dvy6v"]
+[ext_resource type="PackedScene" uid="uid://jta5dophg33a" path="res://Escenas/EscenasUtiles/componente_salud.tscn" id="4_asqwr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_onh3q"]
+radius = 100.603
+
+[sub_resource type="Animation" id="Animation_88pty"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_f8ckg"]
+resource_name = "Volando"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_57p12"]
+_data = {
+"RESET": SubResource("Animation_88pty"),
+"Volando": SubResource("Animation_f8ckg")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7faua"]
+radius = 6.08276
+
+[node name="EnemigoVolador" type="CharacterBody2D"]
+script = ExtResource("1_ku4vx")
+metadata/_edit_group_ = true
+
+[node name="AreaAlerta" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaAlerta"]
+shape = SubResource("CircleShape2D_onh3q")
+debug_color = Color(0.658824, 0.388235, 0.513726, 0.0352941)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, 1.5)
+scale = Vector2(1, 0.875)
+texture = ExtResource("1_jadrh")
+hframes = 5
+frame = 1
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(101, 0)
+
+[node name="AnimacionEnemigo" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_57p12")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_7faua")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
+
+[node name="ComponenteSalud" parent="." instance=ExtResource("4_asqwr")]
+visible = false
+scale = Vector2(0.593524, 0.6)
+collision_layer = 8
+collision_mask = 2
+
+[node name="ComponeteLastimar" parent="." instance=ExtResource("3_dvy6v")]
+scale = Vector2(0.6, 0.6)
+collision_layer = 0
+collision_mask = 2
+
+[connection signal="area_entered" from="AreaAlerta" to="." method="_detectarAreasEntrantes"]
+[connection signal="area_exited" from="AreaAlerta" to="." method="_detectarAreasSaliendo"]
