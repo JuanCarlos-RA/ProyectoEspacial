@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://diou5bc31drhw"]
+[gd_scene load_steps=14 format=3 uid="uid://diou5bc31drhw"]
 
 [ext_resource type="Script" path="res://Scripts/Jugador/jugador.gd" id="1_6hs7k"]
 [ext_resource type="Texture2D" uid="uid://csyt02530r81q" path="res://Recursos/Jugador/JugadorMovimientos.png" id="1_kf64a"]
@@ -8,7 +8,19 @@
 
 [sub_resource type="Animation" id="Animation_alqnq"]
 resource_name = "AtacarDerecha"
-length = 0.4
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ComponeteLastimar/CollisionShape2D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
 
 [sub_resource type="Animation" id="Animation_rwnlb"]
 resource_name = "CaminarAbajo"
@@ -96,6 +108,18 @@ tracks/0/keys = {
 "update": 1,
 "values": [2]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ComponeteLastimar/CollisionShape2D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_paxeh"]
 _data = {
@@ -111,48 +135,12 @@ _data = {
 radius = 25.0
 height = 150.0
 
-[sub_resource type="Animation" id="Animation_skgi2"]
-resource_name = "AtacarDerecha"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ComponeteLastimar/CollisionShape2D:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.198473),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [true, false, true]
-}
-
-[sub_resource type="Animation" id="Animation_xkwvy"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ComponeteLastimar/CollisionShape2D:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_evqb5"]
-_data = {
-"AtacarDerecha": SubResource("Animation_skgi2"),
-"RESET": SubResource("Animation_xkwvy")
-}
-
 [node name="Jugador" type="CharacterBody2D"]
 scale = Vector2(0.06, 0.06)
 collision_layer = 2
 script = ExtResource("1_6hs7k")
 velocidadJugador = 80
+atacando = true
 
 [node name="SpriteJugador" type="Sprite2D" parent="."]
 texture = ExtResource("1_kf64a")
@@ -166,7 +154,7 @@ scale = Vector2(22.5, -15.1875)
 texture = ExtResource("2_vcqnx")
 centered = false
 
-[node name="AnimacionesMovimientoJugador" type="AnimationPlayer" parent="."]
+[node name="AnimacioJugador" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_paxeh")
 }
@@ -187,16 +175,12 @@ saludMaxima = 3
 
 [node name="ComponeteLastimar" parent="." instance=ExtResource("5_g7q1u")]
 position = Vector2(166.667, 66.6667)
-scale = Vector2(10.3333, 17.6667)
+scale = Vector2(10.3334, 17)
+collision_layer = 0
 collision_mask = 8
 
 [node name="CollisionShape2D" parent="ComponeteLastimar" index="0"]
 disabled = false
-
-[node name="AnimacionesAtaques" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_evqb5")
-}
 
 [editable path="ComponenteSalud"]
 [editable path="ComponeteLastimar"]
